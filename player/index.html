@@ -8199,7 +8199,16 @@ function answer(btn,qi,oi){
 }
 
 renderSidebar();
-showHome();
+/* Deep links: #4.2 opens that module directly (used by the learnings hub). */
+function routeFromHash(){
+  const id=decodeURIComponent(location.hash.replace('#',''));
+  if(MODS.some(m=>m.id===id)) showMod(id); else showHome();
+}
+window.addEventListener('hashchange', routeFromHash);
+const _showMod=showMod, _showHome=showHome;
+showMod=function(id){ if(location.hash!=='#'+id) history.replaceState(null,'','#'+id); _showMod(id); };
+showHome=function(){ if(location.hash) history.replaceState(null,'',location.pathname+location.search); _showHome(); };
+routeFromHash();
 </script>
 </body>
 </html>
